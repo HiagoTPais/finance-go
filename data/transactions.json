@@ -1,0 +1,44 @@
+{
+  "transactions": [
+    {
+      "id": 0,
+      "type": "Receita",
+      "value": 100,
+      "description": "",
+      "category": "",
+      "date": "0001-01-01T00:00:00Z"
+    },
+    {
+      "id": 0,
+      "type": "Receita",
+      "value": 400,
+      "description": "",
+      "category": "",
+      "date": "0001-01-01T00:00:00Z"
+    },
+    {
+      "id": 0,
+      "type": "Receita",
+      "value": 1000,
+      "description": "",
+      "category": "",
+      "date": "0001-01-01T00:00:00Z"
+    },
+    {
+      "id": 0,
+      "type": "Despesa",
+      "value": -4000,
+      "description": "",
+      "category": "",
+      "date": "0001-01-01T00:00:00Z"
+    },
+    {
+      "id": 1,
+      "type": "Receita",
+      "value": 8127,
+      "description": "teste",
+      "category": "teste",
+      "date": "2025-06-27T21:39:43.120394025-03:00"
+    }
+  ]
+}
