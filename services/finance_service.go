@@ -18,7 +18,6 @@ func NewFinanceService() *FinanceService {
 
 // AddTransaction adds a new transaction with business logic
 func (fs *FinanceService) AddTransaction(transactionType string, amount float64) {
-	// Business logic: expenses should be negative
 	if transactionType == "Despesa" {
 		amount = -amount
 	}

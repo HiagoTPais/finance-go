@@ -43,31 +43,27 @@ func (ies *ImportExportService) ImportFromCSV(filename string) error {
 		return fmt.Errorf("CSV file must have at least a header and one data row")
 	}
 
-	// Skip header row
 	for i := 1; i < len(records); i++ {
 		record := records[i]
 		if len(record) < 4 {
-			continue // Skip incomplete rows
+			continue
 		}
 
-		// Parse date
 		date, err := time.Parse("2006-01-02", strings.TrimSpace(record[0]))
 		if err != nil {
-			date = time.Now() // Use current date if parsing fails
+			date = time.Now()
 		}
 
-		// Parse amount
 		amountStr := strings.ReplaceAll(strings.TrimSpace(record[1]), ",", ".")
 		amount, err := strconv.ParseFloat(amountStr, 64)
 		if err != nil {
-			continue // Skip rows with invalid amounts
+			continue
 		}
 
-		// Determine transaction type based on amount
 		transactionType := "Receita"
 		if amount < 0 {
 			transactionType = "Despesa"
-			amount = -amount // Make positive for internal storage
+			amount = -amount
 		}
 
 		description := strings.TrimSpace(record[2])
@@ -88,7 +84,6 @@ func (ies *ImportExportService) ImportFromExcel(filename string) error {
 	}
 	defer f.Close()
 
-	// Get the first sheet
 	sheetName := f.GetSheetName(0)
 	rows, err := f.GetRows(sheetName)
 	if err != nil {
@@ -99,37 +94,33 @@ func (ies *ImportExportService) ImportFromExcel(filename string) error {
 		return fmt.Errorf("Excel file must have at least a header and one data row")
 	}
 
-	// Skip header row
 	for i := 1; i < len(rows); i++ {
 		row := rows[i]
 		if len(row) < 4 {
-			continue // Skip incomplete rows
+			continue
 		}
 
-		// Parse date
 		dateStr := strings.TrimSpace(row[0])
 		var date time.Time
 		if dateStr != "" {
 			date, err = time.Parse("2006-01-02", dateStr)
 			if err != nil {
-				date = time.Now() // Use current date if parsing fails
+				date = time.Now()
 			}
 		} else {
 			date = time.Now()
 		}
 
-		// Parse amount
 		amountStr := strings.ReplaceAll(strings.TrimSpace(row[1]), ",", ".")
 		amount, err := strconv.ParseFloat(amountStr, 64)
 		if err != nil {
-			continue // Skip rows with invalid amounts
+			continue
 		}
 
-		// Determine transaction type based on amount
 		transactionType := "Receita"
 		if amount < 0 {
 			transactionType = "Despesa"
-			amount = -amount // Make positive for internal storage
+			amount = -amount
 		}
 
 		description := strings.TrimSpace(row[2])
@@ -153,13 +144,11 @@ func (ies *ImportExportService) ExportToCSV(filename string) error {
 	writer := csv.NewWriter(file)
 	defer writer.Flush()
 
-	// Write header
 	header := []string{"Data", "Valor", "Descrição", "Categoria", "Tipo"}
 	if err := writer.Write(header); err != nil {
 		return fmt.Errorf("error writing CSV header: %w", err)
 	}
 
-	// Write data
 	transactions := ies.financeService.GetTransactions()
 	for _, tx := range transactions {
 		amount := tx.Value
@@ -187,14 +176,12 @@ func (ies *ImportExportService) ExportToExcel(filename string) error {
 	f := excelize.NewFile()
 	defer f.Close()
 
-	// Set headers
 	headers := []string{"Data", "Valor", "Descrição", "Categoria", "Tipo"}
 	for i, header := range headers {
 		cell := fmt.Sprintf("%c1", 'A'+i)
 		f.SetCellValue("Sheet1", cell, header)
 	}
 
-	// Write data
 	transactions := ies.financeService.GetTransactions()
 	for i, tx := range transactions {
 		row := i + 2 // Start from row 2 (after header)
@@ -210,7 +197,6 @@ func (ies *ImportExportService) ExportToExcel(filename string) error {
 		f.SetCellValue("Sheet1", fmt.Sprintf("E%d", row), tx.Type)
 	}
 
-	// Auto-fit columns
 	for i := 0; i < len(headers); i++ {
 		col := string(rune('A' + i))
 		f.SetColWidth("Sheet1", col, col, 15)

@@ -40,7 +40,6 @@ func main() {
 	// Set up auto-save functionality
 	w.Canvas().SetOnTypedKey(func(ke *fyne.KeyEvent) {
 		if ke.Name == fyne.KeyEscape {
-			// Save data when ESC is pressed
 			err := storage.Save(financeService.GetTransactionList())
 			if err != nil {
 				log.Printf("Error saving data: %v", err)

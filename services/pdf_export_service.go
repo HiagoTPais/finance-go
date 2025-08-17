@@ -24,14 +24,11 @@ func (pes *PDFExportService) ExportToPDF(filename string) error {
 	pdf := gofpdf.New("P", "mm", "A4", "")
 	pdf.AddPage()
 
-	// Set font
 	pdf.SetFont("Arial", "B", 16)
 
-	// Title
 	pdf.Cell(190, 10, "Relatório Financeiro")
 	pdf.Ln(15)
 
-	// Summary section
 	pdf.SetFont("Arial", "B", 12)
 	pdf.Cell(190, 8, "Resumo")
 	pdf.Ln(10)
@@ -58,12 +55,10 @@ func (pes *PDFExportService) ExportToPDF(filename string) error {
 	pdf.Cell(190, 6, fmt.Sprintf("Total Despesas: R$ %.2f", totalExpenses))
 	pdf.Ln(10)
 
-	// Transactions table
 	pdf.SetFont("Arial", "B", 12)
 	pdf.Cell(190, 8, "Transações")
 	pdf.Ln(10)
 
-	// Table header
 	pdf.SetFont("Arial", "B", 9)
 	headers := []string{"Data", "Tipo", "Valor", "Descrição", "Categoria"}
 	widths := []float64{25, 20, 25, 70, 30}
@@ -73,7 +68,6 @@ func (pes *PDFExportService) ExportToPDF(filename string) error {
 	}
 	pdf.Ln(-1)
 
-	// Table data
 	pdf.SetFont("Arial", "", 8)
 	for _, tx := range transactions {
 		amount := tx.Value
@@ -89,7 +83,6 @@ func (pes *PDFExportService) ExportToPDF(filename string) error {
 		pdf.Ln(-1)
 	}
 
-	// Category summary
 	pdf.Ln(10)
 	pdf.SetFont("Arial", "B", 12)
 	pdf.Cell(190, 8, "Resumo por Categoria")
@@ -126,7 +119,6 @@ func (pes *PDFExportService) ExportToPDF(filename string) error {
 		pdf.Ln(-1)
 	}
 
-	// Footer
 	pdf.Ln(10)
 	pdf.SetFont("Arial", "I", 8)
 	pdf.Cell(190, 6, fmt.Sprintf("Relatório gerado em: %s", time.Now().Format("02/01/2006 15:04:05")))
@@ -139,21 +131,16 @@ func (pes *PDFExportService) ExportMonthlyReport(filename string, year int, mont
 	pdf := gofpdf.New("P", "mm", "A4", "")
 	pdf.AddPage()
 
-	// Set font
 	pdf.SetFont("Arial", "B", 16)
 
-	// Title
 	pdf.Cell(190, 10, fmt.Sprintf("Relatório Mensal - %s/%d", month.String(), year))
 	pdf.Ln(15)
 
-	// Calculate date range
 	startDate := time.Date(year, month, 1, 0, 0, 0, 0, time.UTC)
 	endDate := startDate.AddDate(0, 1, -1)
 
-	// Get transactions for the month
 	monthlyTransactions := pes.financeService.GetTransactionList().GetTransactionsByDateRange(startDate, endDate)
 
-	// Summary
 	pdf.SetFont("Arial", "B", 12)
 	pdf.Cell(190, 8, "Resumo Mensal")
 	pdf.Ln(10)
@@ -179,12 +166,10 @@ func (pes *PDFExportService) ExportMonthlyReport(filename string, year int, mont
 	pdf.Cell(190, 6, fmt.Sprintf("Saldo do Mês: R$ %.2f", monthlyBalance))
 	pdf.Ln(10)
 
-	// Transactions table
 	pdf.SetFont("Arial", "B", 12)
 	pdf.Cell(190, 8, "Transações do Mês")
 	pdf.Ln(10)
 
-	// Table header
 	pdf.SetFont("Arial", "B", 9)
 	headers := []string{"Data", "Tipo", "Valor", "Descrição", "Categoria"}
 	widths := []float64{25, 20, 25, 70, 30}
@@ -194,7 +179,6 @@ func (pes *PDFExportService) ExportMonthlyReport(filename string, year int, mont
 	}
 	pdf.Ln(-1)
 
-	// Table data
 	pdf.SetFont("Arial", "", 8)
 	for _, tx := range monthlyTransactions {
 		amount := tx.Value
@@ -210,7 +194,6 @@ func (pes *PDFExportService) ExportMonthlyReport(filename string, year int, mont
 		pdf.Ln(-1)
 	}
 
-	// Footer
 	pdf.Ln(10)
 	pdf.SetFont("Arial", "I", 8)
 	pdf.Cell(190, 6, fmt.Sprintf("Relatório gerado em: %s", time.Now().Format("02/01/2006 15:04:05")))

@@ -98,7 +98,6 @@ func (tl *TransactionList) GetCategories() []string {
 	return result
 }
 
-// Simple ID generator (in a real app, you'd use a proper ID system)
 var nextID = 1
 
 func generateID() int {

@@ -16,7 +16,6 @@ type JSONStorage struct {
 
 // NewJSONStorage creates a new JSON storage instance
 func NewJSONStorage(filename string) *JSONStorage {
-	// Create data directory if it doesn't exist
 	dataDir := "data"
 	if err := os.MkdirAll(dataDir, 0755); err != nil {
 		fmt.Printf("Error creating data directory: %v\n", err)
